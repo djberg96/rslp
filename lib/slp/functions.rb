@@ -7,7 +7,9 @@ module OpenSLP
 
     typedef :uintptr_t, :handle
 
-    attach_function :SLPOpen, [:string, :bool, :pointer], :handle
     attach_function :SLPClose, [:handle], :void
+    attach_function :SLPFindScopes, [:handle, :pointer], :int
+    attach_function :SLPFree, [:pointer], :void
+    attach_function :SLPOpen, [:string, :bool, :pointer], :handle
   end
 end
