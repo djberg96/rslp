@@ -39,11 +39,19 @@ module OpenSLP
 
       arr
     end
+
+    # Singleton methods
+
+    def self.refresh_interval
+      SLPGetRefreshInterval()
+    end
   end
 end
 
 if $0 == __FILE__
-  slp = OpenSLP::SLP.new('test')
-  p slp.find_scopes
-  slp.close
+  #slp = OpenSLP::SLP.new('test')
+  #p slp.find_scopes
+  #slp.close
+
+  p OpenSLP::SLP.refresh_interval
 end

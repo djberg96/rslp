@@ -11,5 +11,6 @@ module OpenSLP
     attach_function :SLPFindScopes, [:handle, :pointer], :int
     attach_function :SLPFree, [:pointer], :void
     attach_function :SLPOpen, [:string, :bool, :pointer], :handle
+    attach_function :SLPGetRefreshInterval, [], :uint
   end
 end
