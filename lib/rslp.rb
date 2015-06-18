@@ -45,6 +45,14 @@ module OpenSLP
     def self.refresh_interval
       SLPGetRefreshInterval()
     end
+
+    def self.get_property(name)
+      SLPGetProperty(name)
+    end
+
+    def self.set_property(prop, name)
+      SLPSetProperty(prop, name)
+    end
   end
 end
 
@@ -53,5 +61,5 @@ if $0 == __FILE__
   #p slp.find_scopes
   #slp.close
 
-  p OpenSLP::SLP.refresh_interval
+  p OpenSLP::SLP.get_property('net.slp.broadcastAddr')
 end
