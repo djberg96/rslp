@@ -1,6 +1,7 @@
 require_relative 'slp/functions'
 require_relative 'slp/constants'
 require_relative 'slp/structs'
+require_relative 'slp/helper'
 
 module OpenSLP
   class SLP
@@ -21,10 +22,28 @@ module OpenSLP
     def close
       SLPClose(@handle)
     end
+
+    def find_scopes
+      begin
+        pptr = FFI::MemoryPointer.new(:pointer, 128)
+
+        if SLPFindScopes(@handle, pptr) != SLP_OK
+          raise SystemCallError.new('SLPOpen', FFI.errno)
+        end
+
+        arr = pptr.read_array_of_string
+      ensure
+        SLPFree(pptr.read_pointer)
+        pptr.free
+      end
+
+      arr
+    end
   end
 end
 
 if $0 == __FILE__
   slp = OpenSLP::SLP.new('test')
+  p slp.find_scopes
   slp.close
 end
