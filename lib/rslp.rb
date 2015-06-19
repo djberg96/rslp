@@ -99,18 +99,44 @@ module OpenSLP
     # form of an LDAP search filter. The default is an empty string, which
     # will gather all services of the requested type.
     #
-    def find_services(type, scope, filter = '')
+    def find_services(type, scope = '', filter = '')
       arr = []
 
       callback = Proc.new{ |hslp, url, life, err, cook|
-        arr << url if err == SLP_OK
-        return SLP_FALSE if err == SLP_LAST_CALL
-        return SLP_TRUE
+        if err == SLP_OK && url
+          arr << {url => life}
+          true
+        else
+          false
+        end
       }
 
       cookie = FFI::MemoryPointer.new(:void)
 
       rv = SLPFindSrvs(@handle, type, scope, filter, callback, cookie)
+
+      if rv != SLP_OK
+        raise SystemCallError.new('SLPFindSrvs', rv)
+      end
+
+      arr
+    end
+
+    def find_service_types(auth = '*', scope = '')
+      arr = []
+
+      callback = Proc.new{ |hslp, types, err, cookie|
+        if err == SLP_OK && types
+          arr << types
+          true
+        else
+          false
+        end
+      }
+
+      cookie = FFI::MemoryPointer.new(:void)
+
+      rv = SLPFindSrvTypes(@handle, auth, scope, callback, cookie)
 
       if rv != SLP_OK
         raise SystemCallError.new('SLPFindSrvs', rv)
