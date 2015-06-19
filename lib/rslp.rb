@@ -27,14 +27,48 @@ module OpenSLP
       begin
         pptr = FFI::MemoryPointer.new(:pointer, 128)
 
-        if SLPFindScopes(@handle, pptr) != SLP_OK
-          raise SystemCallError.new('SLPOpen', FFI.errno)
+        rv = SLPFindScopes(@handle, pptr)
+
+        if rv != SLP_OK
+          raise SystemCallError.new('SLPFindScopes', rv)
         end
 
         arr = pptr.read_array_of_string
       ensure
         SLPFree(pptr.read_pointer)
         pptr.free
+      end
+
+      arr
+    end
+
+    # Issue a query for services.
+    #
+    # The +type+ argument is the service type string, including the authority
+    # string, for the request. It may not be nil or empty.
+    #
+    # The +scope+ argument is a comma separated list of scope names. May be an
+    # empty string if you wish to use scopes this machine is configured for.
+    #
+    # A query formulated of attribute pattern matching expressions in the
+    # form of an LDAP search filter. Pass an empty string for all services
+    # of the requested type.
+    #
+    def find_services(type, scope, filter)
+      arr = []
+
+      callback = Proc.new{ |hslp, url, life, err, cook|
+        arr << url if err == SLP_OK
+        return SLP_FALSE if err == SLP_LAST_CALL
+        return SLP_TRUE
+      }
+
+      cookie = FFI::MemoryPointer.new(:void)
+
+      rv = SLPFindSrvs(@handle, type, scope, filter, callback, cookie)
+
+      if rv != SLP_OK
+        raise SystemCallError.new('SLPFindSrvs', rv)
       end
 
       arr
