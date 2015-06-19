@@ -16,6 +16,30 @@ module OpenSLP
     # Returns whether or not the SLP instance is asynchronous.
     attr_reader :async
 
+    # Creates and returns an OpenSLP::SLP object. This establishes a handle
+    # that is used for the life of the object.
+    #
+    # The +lang+ argument may be an RFC 1766 language tag, e.g. 'en-us', that
+    # sets the natural language local for requests. By default it uses your
+    # machine's locale.
+    #
+    # The +async+ argument may be set to true or false and establishes whether
+    # the underlying handle is set to handl asynchronous operations or not. By
+    # default this value is false.
+    #
+    # If a block is given, then the object itself is yielded to the block, and
+    # it is automatically closed at the end of the block.
+    #
+    # Examples:
+    #
+    #   OpenSLP::SLP.new('en-us') do |slp|
+    #     # ... do stuff
+    #   end
+    #
+    #   slp = OpenSLP::SLP.new('en-us')
+    #   # Do stuff
+    #   slp.close
+    #
     def initialize(lang = '', async = false)
       @lang = lang
       @async = async
