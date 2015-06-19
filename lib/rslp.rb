@@ -10,10 +10,19 @@ module OpenSLP
     include OpenSLP::Structs
     extend OpenSLP::Functions
 
-    def initialize(name, async = false)
+    # The language tag for requests.
+    attr_reader :lang
+
+    # Returns whether or not the SLP instance is asynchronous.
+    attr_reader :async
+
+    def initialize(lang = '', async = false)
+      @lang = lang
+      @async = async
+
       ptr = FFI::MemoryPointer.new(:uintptr_t)
 
-      if SLPOpen(name, async, ptr) != SLP_OK
+      if SLPOpen(lang, async, ptr) != SLP_OK
         raise SystemCallError.new('SLPOpen', FFI.errno)
       end
 
