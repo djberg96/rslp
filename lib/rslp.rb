@@ -7,6 +7,7 @@ module OpenSLP
   class SLP
     include OpenSLP::Functions
     include OpenSLP::Constants
+    include OpenSLP::Structs
     extend OpenSLP::Functions
 
     def initialize(name, async = false)
