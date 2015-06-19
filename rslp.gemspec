@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.test_files = Dir['spec/*.rb']
   gem.files      = Dir['**/*'].reject{ |f| f.include?('git') }
 
-  gem.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
+  gem.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST', 'LICENSE']
 
   gem.add_dependency('ffi', "~> 1.9.8")
 
