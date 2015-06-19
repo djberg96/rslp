@@ -103,7 +103,7 @@ module OpenSLP
       arr = []
 
       callback = Proc.new{ |hslp, url, life, err, cook|
-        if err == SLP_OK && url
+        if err == SLP_OK
           arr << {url => life}
           true
         else
@@ -126,7 +126,7 @@ module OpenSLP
       arr = []
 
       callback = Proc.new{ |hslp, types, err, cookie|
-        if err == SLP_OK && types
+        if err == SLP_OK
           arr << types
           true
         else
@@ -137,6 +137,29 @@ module OpenSLP
       cookie = FFI::MemoryPointer.new(:void)
 
       rv = SLPFindSrvTypes(@handle, auth, scope, callback, cookie)
+
+      if rv != SLP_OK
+        raise SystemCallError.new('SLPFindSrvs', rv)
+      end
+
+      arr
+    end
+
+    def find_service_attributes(url, scope = '', attrs = '')
+      arr = []
+
+      callback = Proc.new{ |hslp, attrlist, err, cookie|
+        if err == SLP_OK
+          arr << attrlist
+          true
+        else
+          false
+        end
+      }
+
+      cookie = FFI::MemoryPointer.new(:void)
+
+      rv = SLPFindAttrs(@handle, url, scope, attrs, callback, cookie)
 
       if rv != SLP_OK
         raise SystemCallError.new('SLPFindSrvs', rv)
