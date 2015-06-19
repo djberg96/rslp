@@ -9,9 +9,14 @@ module OpenSLP
 
     callback :SLPSrvURLCallback, [:handle, :string, :ushort, :int, :pointer], :bool
     callback :SLPSrvTypeCallback, [:handle, :string, :int, :pointer], :bool
+    callback :SLPAttrCallback, [:handle, :string, :int, :pointer], :bool
 
     attach_function :SLPClose, [:handle], :void
     attach_function :SLPEscape, [:string, :pointer, :bool], :int
+
+    attach_function :SLPFindAttrs,
+      [:handle, :string, :string, :string, :SLPAttrCallback, :pointer], :int
+
     attach_function :SLPFindScopes, [:handle, :pointer], :int
 
     attach_function :SLPFindSrvs,
