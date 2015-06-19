@@ -18,6 +18,14 @@ module OpenSLP
       end
 
       @handle = ptr.read_ulong_long
+
+      if block_given?
+        begin
+          yield self
+        ensure
+          close
+        end
+      end
     end
 
     def close
@@ -95,6 +103,8 @@ if $0 == __FILE__
   #slp = OpenSLP::SLP.new('test')
   #p slp.find_scopes
   #slp.close
+  OpenSLP::SLP.new('test') do |o|
+  end
 
-  p OpenSLP::SLP.get_property('net.slp.broadcastAddr')
+  #p OpenSLP::SLP.get_property('net.slp.broadcastAddr')
 end
