@@ -22,5 +22,6 @@ module OpenSLP
     attach_function :SLPOpen, [:string, :bool, :pointer], :handle
     attach_function :SLPParseSrvURL, [:string, :pointer], :int
     attach_function :SLPSetProperty, [:string, :string], :void
+    attach_function :SLPUnescape, [:string, :pointer, :bool], :int
   end
 end

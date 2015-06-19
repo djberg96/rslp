@@ -129,6 +129,22 @@ module OpenSLP
 
       str
     end
+
+    def self.unescape_reserved(string, istag = true)
+      begin
+        pptr = FFI::MemoryPointer.new(:pointer)
+
+        if SLPUnescape(string, pptr, istag) != SLP_OK
+          raise SystemCallError.new('SLPEscape', FFI.errno)
+        end
+
+        str = pptr.read_pointer.read_string
+      ensure
+        SLPFree(pptr.read_pointer)
+      end
+
+      str
+    end
   end
 end
 
