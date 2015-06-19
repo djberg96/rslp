@@ -96,6 +96,23 @@ module OpenSLP
     def self.set_property(prop, name)
       SLPSetProperty(prop, name)
     end
+
+    def self.parse_service_url(url)
+      begin
+        pptr = FFI::MemoryPointer.new(SLPSrvURL)
+
+        if SLPParseSrvURL(url, pptr) != SLP_OK
+          raise SystemCallError.new('SLPParseSrvURL', FFI.errno)
+        end
+
+        ptr = pptr.read_pointer
+        struct = SLPSrvURL.new(ptr)
+      ensure
+        SLPFree(ptr)
+      end
+
+      struct
+    end
   end
 end
 
@@ -103,8 +120,8 @@ if $0 == __FILE__
   #slp = OpenSLP::SLP.new('test')
   #p slp.find_scopes
   #slp.close
-  OpenSLP::SLP.new('test') do |o|
-  end
 
   #p OpenSLP::SLP.get_property('net.slp.broadcastAddr')
+  s = OpenSLP::SLP.parse_service_url("http://www.localhost.com:3000")
+  p s[:s_iPort]
 end
