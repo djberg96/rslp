@@ -113,6 +113,22 @@ module OpenSLP
 
       struct
     end
+
+    def self.escape_reserved(string, istag = true)
+      begin
+        pptr = FFI::MemoryPointer.new(:pointer)
+
+        if SLPEscape(string, pptr, istag) != SLP_OK
+          raise SystemCallError.new('SLPEscape', FFI.errno)
+        end
+
+        str = pptr.read_pointer.read_string
+      ensure
+        SLPFree(pptr.read_pointer)
+      end
+
+      str
+    end
   end
 end
 
@@ -124,4 +140,6 @@ if $0 == __FILE__
   #p OpenSLP::SLP.get_property('net.slp.broadcastAddr')
   s = OpenSLP::SLP.parse_service_url("http://www.localhost.com:3000")
   p s[:s_iPort]
+
+  p OpenSLP::SLP.escape_reserved(",tag-example,")
 end
