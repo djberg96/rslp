@@ -61,6 +61,9 @@ module OpenSLP
       end
     end
 
+    # Close the OpenSLP::SLP object. The block form of the constructor will
+    # automatically call this for you.
+    #
     def close
       SLPClose(@handle)
     end
@@ -118,18 +121,30 @@ module OpenSLP
 
     # Singleton methods
 
+    # Returns the minimum refresh interval that will be accepted by all SLP
+    # agents on the network. If no agents advertise a minimum refresh interval
+    # then zero is returned, though that is not a valid lifetime parameter to
+    # other methods.
+    #
     def self.refresh_interval
       SLPGetRefreshInterval()
     end
 
+    # Returns the value of the SLP property +name+.
+    #
     def self.get_property(name)
       SLPGetProperty(name)
     end
 
+    # Sets the value of the SLP property +prop+ to +name+.
+    #
     def self.set_property(prop, name)
       SLPSetProperty(prop, name)
+      name
     end
 
+    # Parses a Service URL string and returns SLPSrvURL struct.
+    #
     def self.parse_service_url(url)
       begin
         pptr = FFI::MemoryPointer.new(SLPSrvURL)
@@ -147,6 +162,9 @@ module OpenSLP
       struct
     end
 
+    # Process the +string+ to escape any SLP reserved characters. If the
+    # +istag_ parameter is true then it will look for bad tag characters.
+    #
     def self.escape_reserved(string, istag = true)
       begin
         pptr = FFI::MemoryPointer.new(:pointer)
@@ -163,6 +181,9 @@ module OpenSLP
       str
     end
 
+    # Process the +string+ to unescape any SLP reserved characters. If the
+    # +istag_ parameter is true then it will look for bad tag characters.
+    #
     def self.unescape_reserved(string, istag = true)
       begin
         pptr = FFI::MemoryPointer.new(:pointer)
@@ -178,11 +199,5 @@ module OpenSLP
 
       str
     end
-  end
-end
-
-if $0 == __FILE__
-  OpenSLP::SLP.new('test') do |slp|
-    slp.find_services('service:printer:lpr', 'default')
   end
 end
