@@ -60,10 +60,10 @@ module OpenSLP
     # empty string if you wish to use scopes this machine is configured for.
     #
     # A query formulated of attribute pattern matching expressions in the
-    # form of an LDAP search filter. Pass an empty string for all services
-    # of the requested type.
+    # form of an LDAP search filter. The default is an empty string, which
+    # will gather all services of the requested type.
     #
-    def find_services(type, scope, filter)
+    def find_services(type, scope, filter = '')
       arr = []
 
       callback = Proc.new{ |hslp, url, life, err, cook|
@@ -149,13 +149,7 @@ module OpenSLP
 end
 
 if $0 == __FILE__
-  #slp = OpenSLP::SLP.new('test')
-  #p slp.find_scopes
-  #slp.close
-
-  #p OpenSLP::SLP.get_property('net.slp.broadcastAddr')
-  s = OpenSLP::SLP.parse_service_url("http://www.localhost.com:3000")
-  p s[:s_iPort]
-
-  p OpenSLP::SLP.escape_reserved(",tag-example,")
+  OpenSLP::SLP.new('test') do |slp|
+    slp.find_services('service:printer:lpr', 'default')
+  end
 end
