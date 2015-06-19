@@ -7,8 +7,14 @@ module OpenSLP
 
     typedef :uintptr_t, :handle
 
+    callback_function :SLPSrvURLCallback, [:handle, :string, :ushort, :int, :pointer], :bool
+
     attach_function :SLPClose, [:handle], :void
     attach_function :SLPFindScopes, [:handle, :pointer], :int
+
+    attach_function :SLPFindSrvs,
+      [:handle, :string, :string, :string, :SLPSrvULRCallback, :pointer], :int
+
     attach_function :SLPFree, [:pointer], :void
     attach_function :SLPGetProperty, [:string], :string
     attach_function :SLPGetRefreshInterval, [], :uint
