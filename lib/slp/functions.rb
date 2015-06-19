@@ -19,6 +19,7 @@ module OpenSLP
     attach_function :SLPGetProperty, [:string], :string
     attach_function :SLPGetRefreshInterval, [], :uint
     attach_function :SLPOpen, [:string, :bool, :pointer], :handle
+    attach_function :SLPParseSrvURL, [:string, :pointer], :int
     attach_function :SLPSetProperty, [:string, :string], :void
   end
 end
