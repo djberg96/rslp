@@ -10,6 +10,7 @@ module OpenSLP
     callback :SLPSrvURLCallback, [:handle, :string, :ushort, :int, :pointer], :bool
 
     attach_function :SLPClose, [:handle], :void
+    attach_function :SLPEscape, [:string, :pointer, :bool], :int
     attach_function :SLPFindScopes, [:handle, :pointer], :int
 
     attach_function :SLPFindSrvs,
