@@ -19,7 +19,7 @@ module OpenSLP
       end
     end
 
-    typedef :uintptr_t, :handle
+    typedef :ulong, :handle
 
     callback :SLPSrvURLCallback, [:handle, :string, :ushort, :int, :pointer], :bool
     callback :SLPSrvTypeCallback, [:handle, :string, :int, :pointer], :bool
