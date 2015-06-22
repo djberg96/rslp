@@ -3,7 +3,21 @@ require 'ffi'
 module OpenSLP
   module Functions
     extend FFI::Library
-    ffi_lib :libslp
+
+    # Look for either slp or libslip
+    begin
+      ffi_lib :libslp
+    rescue LoadError
+      begin
+        ffi_lib :slp
+      rescue LoadError
+        if File::ALT_SEPARATOR
+          ffi_lib "C:/Program Files (x86)/OpenSLP/slp"
+        else
+          raise
+        end
+      end
+    end
 
     typedef :uintptr_t, :handle
 
