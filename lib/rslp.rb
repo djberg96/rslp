@@ -44,13 +44,13 @@ module OpenSLP
       @lang = lang
       @async = async
 
-      ptr = FFI::MemoryPointer.new(:uintptr_t)
+      ptr = FFI::MemoryPointer.new(:ulong)
 
       if SLPOpen(lang, async, ptr) != SLP_OK
         raise SystemCallError.new('SLPOpen', FFI.errno)
       end
 
-      @handle = ptr.read_ulong_long
+      @handle = ptr.read_ulong
 
       if block_given?
         begin
