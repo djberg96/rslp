@@ -3,7 +3,7 @@
 #
 # Test suite for the rslip library.
 ########################################################################
-require 'rspec/autorun'
+require 'rspec'
 require 'rslp'
 
 describe "rslp" do
@@ -18,12 +18,12 @@ describe "rslp" do
     end
 
     it "defaults to a false async value if no value is provided" do
-      expect(OpenSLP::SLP.new.async).to be_false
+      expect(OpenSLP::SLP.new.async).to be false
     end
 
     it "sets attributes to expected values" do
       expect(@slp.lang).to eq(@lang)
-      expect(@slp.async).to be_false
+      expect(@slp.async).to be false
     end
   end
 
