@@ -1,7 +1,7 @@
 ########################################################################
-# rslip_spec.rb
+# rslp_spec.rb
 #
-# Test suite for the rslip library.
+# Test suite for the rslp library.
 ########################################################################
 require 'rspec'
 require 'rslp'
