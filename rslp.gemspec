@@ -4,7 +4,7 @@ require 'rbconfig'
 Gem::Specification.new do |gem|
   gem.name       = 'rslp'
   gem.version    = '0.1.0'
-  gem.license    = 'Apache 2.0'
+  gem.license    = 'Apache-2.0'
   gem.author     = 'Daniel J. Berger'
   gem.email      = 'djberg96@gmail.com'
   gem.homepage   = 'https://github.com/djberg96/rslp'
@@ -16,8 +16,8 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency('ffi', "~> 1.9.8")
 
-  gem.add_development_dependency('rake', "~> 10.0")
-  gem.add_development_dependency('rspec', "~> 3.0")
+  gem.add_development_dependency('rake')
+  gem.add_development_dependency('rspec', "~> 3.9")
 
   gem.description = <<-EOF
     The rslp library is an FFI interface for the OpenSLP service
