@@ -111,6 +111,16 @@ module OpenSLP
       options[:url]
     end
 
+    def deregister(url)
+      callback = Proc.new{ |hslp, err, cookie| }
+      cookie = FFI::MemoryPointer.new(:void)
+
+      result = SLPDereg(@handle, url, callback, cookie)
+      raise SystemCallError.new('SLPDereg', result) if result != SLP_OK
+
+      true
+    end
+
     def find_scopes
       begin
         pptr = FFI::MemoryPointer.new(:pointer, 128)
@@ -292,9 +302,4 @@ module OpenSLP
       str
     end
   end
-end
-
-OpenSLP::SLP.new do |slp|
-  url = "service:myservice.myorg://localhost:3001"
-  slp.register(:url => url, :attributes => {:some_key => "hello"})
 end
