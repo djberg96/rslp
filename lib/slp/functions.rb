@@ -28,6 +28,7 @@ module OpenSLP
 
     attach_function :SLPClose, [:handle], :void
     attach_function :SLPEscape, [:string, :pointer, :bool], :int
+    attach_function :SLPDelAttrs, [:handle, :string, :string, :SLPRegReportCallback, :pointer], :int
     attach_function :SLPDereg, [:handle, :string, :SLPRegReportCallback, :pointer], :int
 
     attach_function :SLPFindAttrs,

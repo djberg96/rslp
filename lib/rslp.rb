@@ -124,6 +124,22 @@ module OpenSLP
       true
     end
 
+    # Deletes specified attributes from a registered service. The attributes
+    # argument should be a comma separated list (in string form) of attribute
+    # ids.
+    #
+    # Returns the list of deleted attributes if successful.
+    #
+    def delete_service_attributes(url, attributes)
+      callback = Proc.new{ |hslp, err, cookie| }
+      cookie = FFI::MemoryPointer.new(:void)
+
+      result = SLPDelAttrs(@handle, url, attributes, callback, cookie)
+      raise SystemCallError.new('SLPDelAttrs', result) if result != SLP_OK
+
+      attributes
+    end
+
     # Returns a list of scopes. The most desirable values are always first in
     # the list. There is always at least one value ("DEFAULT") in the list.
     #
@@ -181,6 +197,17 @@ module OpenSLP
       arr
     end
 
+    # The find_service_types method issues an SLP service type request for
+    # service types indicated by the scope parameter, limited by the naming
+    # authority +auth+.
+    #
+    # The default naming authority is '*', i.e. all naming authorities. A
+    # blank string will result in the default naming authority of IANA.
+    #
+    # A blank +scope+ parameter will use scopes this machine is configured for.
+    #
+    # Returns an array of service type names.
+    #
     def find_service_types(auth = '*', scope = '')
       arr = []
 
@@ -204,7 +231,12 @@ module OpenSLP
       arr
     end
 
-    def find_service_attributes(url, scope = '', attrs = '')
+    # Return a list of service attributes matching the +attrs+ for the
+    # indicated service +url+ using the given +scope+.
+    #
+    # A blank +scope+ parameter will use scopes this machine is configured for.
+    #
+    def find_service_attributes(url, attrs = '', scope = '')
       arr = []
 
       callback = Proc.new{ |hslp, attrlist, err, cookie|
