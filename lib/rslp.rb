@@ -111,6 +111,9 @@ module OpenSLP
       options[:url]
     end
 
+    # Deregisters the advertisement for +url+ in all scopes where the service
+    # is registered and all language locales.
+    #
     def deregister(url)
       callback = Proc.new{ |hslp, err, cookie| }
       cookie = FFI::MemoryPointer.new(:void)
@@ -121,6 +124,9 @@ module OpenSLP
       true
     end
 
+    # Returns a list of scopes. The most desirable values are always first in
+    # the list. There is always at least one value ("DEFAULT") in the list.
+    #
     def find_scopes
       begin
         pptr = FFI::MemoryPointer.new(:pointer, 128)
