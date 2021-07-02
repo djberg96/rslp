@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.extra_rdoc_files  = ['README.md', 'CHANGES.md', 'MANIFEST.md', 'LICENSE']
 
-  spec.add_dependency('ffi', "~> 1.9.8")
+  spec.add_dependency('ffi', "~> 1.1")
 
   spec.add_development_dependency('rake')
   spec.add_development_dependency('rspec', "~> 3.9")
