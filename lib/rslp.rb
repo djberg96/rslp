@@ -10,6 +10,9 @@ module OpenSLP
     include OpenSLP::Structs
     extend OpenSLP::Functions
 
+    # The version of the rslp library.
+    VERSION = '0.0.1'.freeze
+
     # The language tag for requests.
     attr_reader :lang
 

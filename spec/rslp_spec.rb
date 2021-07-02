@@ -12,6 +12,12 @@ describe OpenSLP::SLP do
     @slp = OpenSLP::SLP.new(@lang, false)
   end
 
+  context "version" do
+    example "version is set to the expected value" do
+      expect(OpenSLP::SLP::VERSION).to eq('0.0.1')
+    end
+  end
+
   context "constructor" do
     example "defaults to an empty string if no lang is provided" do
       expect(OpenSLP::SLP.new.lang).to eq('')
