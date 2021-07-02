@@ -68,6 +68,49 @@ module OpenSLP
       SLPClose(@handle)
     end
 
+    # Register a :url for the given :lifetime. You may also specify a hash
+    # of :attributes, specify whether or not this is a :fresh service.
+    #
+    # The lifetime defaults to SLP_LIFETIME_DEFAULT.
+    #
+    # The attributes defaults to an empty string. Note that the has you provide
+    # automatically converts the attributes into the appropriate format.
+    #
+    # By default it will be considered a fresh service.
+    #
+    # Returns the url if successful.
+    #
+    def register(options = {})
+      options[:lifetime] ||= SLP_LIFETIME_DEFAULT
+      options[:attributes] ||= ""
+      options[:fresh] ||= true
+
+      options[:callback] ||= Proc.new{ |hslp, err, cookie| }
+
+      if options[:attributes] && options[:attributes] != ""
+        attributes = options[:attributes].map{ |k,v| "(#{k}=#{v})" }.join(',')
+      else
+        attributes = ""
+      end
+
+      cookie = FFI::MemoryPointer.new(:void)
+
+      result = SLPReg(
+        @handle,
+        options[:url],
+        options[:lifetime],
+        nil,
+        attributes,
+        options[:fresh],
+        options[:callback],
+        cookie
+      )
+
+      raise SystemCallError.new('SLPReg', result) if result != SLP_OK
+
+      options[:url]
+    end
+
     def find_scopes
       begin
         pptr = FFI::MemoryPointer.new(:pointer, 128)
@@ -249,4 +292,9 @@ module OpenSLP
       str
     end
   end
+end
+
+OpenSLP::SLP.new do |slp|
+  url = "service:myservice.myorg://localhost:3001"
+  slp.register(:url => url, :attributes => {:some_key => "hello"})
 end

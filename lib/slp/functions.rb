@@ -24,6 +24,7 @@ module OpenSLP
     callback :SLPSrvURLCallback, [:handle, :string, :ushort, :int, :pointer], :bool
     callback :SLPSrvTypeCallback, [:handle, :string, :int, :pointer], :bool
     callback :SLPAttrCallback, [:handle, :string, :int, :pointer], :bool
+    callback :SLPRegReportCallback, [:handle, :int, :pointer], :void
 
     attach_function :SLPClose, [:handle], :void
     attach_function :SLPEscape, [:string, :pointer, :bool], :int
@@ -44,6 +45,7 @@ module OpenSLP
     attach_function :SLPGetRefreshInterval, [], :uint
     attach_function :SLPOpen, [:string, :bool, :pointer], :handle
     attach_function :SLPParseSrvURL, [:string, :pointer], :int
+    attach_function :SLPReg, [:handle, :string, :ushort, :string, :string, :bool, :SLPRegReportCallback, :pointer], :int
     attach_function :SLPSetProperty, [:string, :string], :void
     attach_function :SLPUnescape, [:string, :pointer, :bool], :int
   end
