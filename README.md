@@ -7,6 +7,7 @@ A Ruby wrapper for OpenSLP using FFI.
 ## Synopsis
 ```ruby
 require 'rslp'
+
 OpenSLP::SLP.new do |slp|
   # See docs for more methods
   p slp.find_services
@@ -21,6 +22,15 @@ https://github.com/djberg96/rslp
 
 ## Future Plans
 None at this time.
+
+## Maintenance
+Please contact me about taking over maintenance of this library if you are
+interested. I'm not actually using it myself, and have no real plans to update
+it.
+
+Why then? I originally wrote most of this when I thought we might need it
+for a project at work. That never materialized, but I hated to let it go to
+waste, so I've published what I completed.
 
 ## License
 Apache-2.0
