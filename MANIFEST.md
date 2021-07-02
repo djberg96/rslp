@@ -1,9 +1,11 @@
 CHANGES.md
+Gemfile
 LICENSE
 MANIFEST.md
 README.md
 rslp.gemspec
 Rakefile
+certs/djberg96_pub.pem
 lib/rslp.rb
 lib/slp/constants.rb
 lib/slp/functions.rb
