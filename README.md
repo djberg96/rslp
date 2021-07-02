@@ -6,8 +6,9 @@ case.
 
 Consequently I have no need of this, but am happy to turn it over to someone
 who might find it useful. If interested, please contact me offline and we can
-discuss transferring the repository. In the meantime, this repository has been
-archived.
+discuss transferring the repository.
+
+I may yet tinker with it from time to time until that happens, though.
 
 ## Description
 
@@ -15,13 +16,16 @@ A Ruby wrapper for OpenSLP using FFI.
 
 ## Installation
 
-gem install rslp
+`gem install rslp`
 
 ## Synopsis
 
+```ruby
 require 'rslp'
-
-slp = OpenSLP::SLP.new('test')
+OpenSLP::SLP.new do |slp|
+  # Do stuff
+end
+```
 
 ## Author
 
