@@ -4,6 +4,9 @@ A Ruby wrapper for OpenSLP using FFI.
 ## Installation
 `gem install rslp`
 
+## Adding the trusted cert
+`gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/rslp/main/certs/djberg96_pub.pem)`
+
 ## Synopsis
 ```ruby
 require 'rslp'
