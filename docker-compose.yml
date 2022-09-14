@@ -1,0 +1,8 @@
+services:
+  openslp:
+    image: vcrhonek/openslp:latest
+    restart: always
+    logging:
+      driver: 'none' # disable saving logs
+    ports:
+      - 427:427 # smtp server
