@@ -30,7 +30,7 @@ module OpenSLP
     # machine's locale.
     #
     # The +async+ argument may be set to true or false and establishes whether
-    # the underlying handle is set to handl asynchronous operations or not. By
+    # the underlying handle is set to handle asynchronous operations or not. By
     # default this value is false.
     #
     # If a block is given, then the object itself is yielded to the block, and
