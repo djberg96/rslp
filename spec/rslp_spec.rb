@@ -6,7 +6,7 @@
 require 'rspec'
 require 'rslp'
 
-describe OpenSLP::SLP do
+RSpec.describe OpenSLP::SLP do
   before do
     @lang = 'en-us'
     @slp = OpenSLP::SLP.new(@lang, false)
@@ -14,7 +14,7 @@ describe OpenSLP::SLP do
 
   context "version" do
     example "version is set to the expected value" do
-      expect(OpenSLP::SLP::VERSION).to eq('0.0.1')
+      expect(OpenSLP::SLP::VERSION).to eq('0.0.2')
     end
   end
 

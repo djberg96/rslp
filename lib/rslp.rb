@@ -11,7 +11,10 @@ module OpenSLP
     extend OpenSLP::Functions
 
     # The version of the rslp library.
-    VERSION = '0.0.1'.freeze
+    VERSION = '0.0.2'.freeze
+
+    # Internal error raised whenever an openslp function fails.
+    class Error < StandardError; end
 
     # The language tag for requests.
     attr_reader :lang
@@ -27,7 +30,7 @@ module OpenSLP
     # machine's locale.
     #
     # The +async+ argument may be set to true or false and establishes whether
-    # the underlying handle is set to handl asynchronous operations or not. By
+    # the underlying handle is set to handle asynchronous operations or not. By
     # default this value is false.
     #
     # If a block is given, then the object itself is yielded to the block, and
@@ -49,9 +52,8 @@ module OpenSLP
 
       ptr = FFI::MemoryPointer.new(:ulong)
 
-      if SLPOpen(lang, async, ptr) != SLP_OK
-        raise SystemCallError.new('SLPOpen', FFI.errno)
-      end
+      result = SLPOpen(lang, async, ptr)
+      raise Error, "SLPOpen(): #{result}" if result != :SLP_OK
 
       @handle = ptr.read_ulong
 
@@ -109,7 +111,7 @@ module OpenSLP
         cookie
       )
 
-      raise SystemCallError.new('SLPReg', result) if result != SLP_OK
+      raise Error, "SLPReg(): #{result}" if result != :SLP_OK
 
       options[:url]
     end
@@ -122,7 +124,7 @@ module OpenSLP
       cookie = FFI::MemoryPointer.new(:void)
 
       result = SLPDereg(@handle, url, callback, cookie)
-      raise SystemCallError.new('SLPDereg', result) if result != SLP_OK
+      raise Error, "SLPDereg(): #{result}" if result != :SLP_OK
 
       true
     end
@@ -138,7 +140,7 @@ module OpenSLP
       cookie = FFI::MemoryPointer.new(:void)
 
       result = SLPDelAttrs(@handle, url, attributes, callback, cookie)
-      raise SystemCallError.new('SLPDelAttrs', result) if result != SLP_OK
+      raise Error, "SLPDelAttrs(): #{result}" if result != :SLP_OK
 
       attributes
     end
@@ -150,11 +152,8 @@ module OpenSLP
       begin
         pptr = FFI::MemoryPointer.new(:pointer, 128)
 
-        rv = SLPFindScopes(@handle, pptr)
-
-        if rv != SLP_OK
-          raise SystemCallError.new('SLPFindScopes', rv)
-        end
+        result = SLPFindScopes(@handle, pptr)
+        raise Error, "SLPFindScopes(): #{result}" if result != :SLP_OK
 
         arr = pptr.read_array_of_string
       ensure
@@ -191,11 +190,8 @@ module OpenSLP
 
       cookie = FFI::MemoryPointer.new(:void)
 
-      rv = SLPFindSrvs(@handle, type, scope, filter, callback, cookie)
-
-      if rv != SLP_OK
-        raise SystemCallError.new('SLPFindSrvs', rv)
-      end
+      result = SLPFindSrvs(@handle, type, scope, filter, callback, cookie)
+      raise Error, "SLPFindSrvs(): #{result}" if result != :SLP_OK
 
       arr
     end
@@ -225,11 +221,8 @@ module OpenSLP
 
       cookie = FFI::MemoryPointer.new(:void)
 
-      rv = SLPFindSrvTypes(@handle, auth, scope, callback, cookie)
-
-      if rv != SLP_OK
-        raise SystemCallError.new('SLPFindSrvs', rv)
-      end
+      result = SLPFindSrvTypes(@handle, auth, scope, callback, cookie)
+      raise Error, "SLPFindSrvs(): #{result}" if result != :SLP_OK
 
       arr
     end
@@ -253,11 +246,8 @@ module OpenSLP
 
       cookie = FFI::MemoryPointer.new(:void)
 
-      rv = SLPFindAttrs(@handle, url, scope, attrs, callback, cookie)
-
-      if rv != SLP_OK
-        raise SystemCallError.new('SLPFindSrvs', rv)
-      end
+      result = SLPFindAttrs(@handle, url, scope, attrs, callback, cookie)
+      raise Error, "SLPFindAttrs(): #{result}" if result != :SLP_OK
 
       arr
     end
@@ -292,9 +282,8 @@ module OpenSLP
       begin
         pptr = FFI::MemoryPointer.new(SLPSrvURL)
 
-        if SLPParseSrvURL(url, pptr) != SLP_OK
-          raise SystemCallError.new('SLPParseSrvURL', FFI.errno)
-        end
+        result = SLPParseSrvURL(url, pptr)
+        raise Error, "SLPParseSrvURL(): #{result}" if result != :SLP_OK
 
         ptr = pptr.read_pointer
         struct = SLPSrvURL.new(ptr)
@@ -312,9 +301,8 @@ module OpenSLP
       begin
         pptr = FFI::MemoryPointer.new(:pointer)
 
-        if SLPEscape(string, pptr, istag) != SLP_OK
-          raise SystemCallError.new('SLPEscape', FFI.errno)
-        end
+        result = SLPEscape(string, pptr, istag)
+        raise Error, "SLPEscape(): #{result}" if result != :SLP_OK
 
         str = pptr.read_pointer.read_string
       ensure
@@ -331,9 +319,8 @@ module OpenSLP
       begin
         pptr = FFI::MemoryPointer.new(:pointer)
 
-        if SLPUnescape(string, pptr, istag) != SLP_OK
-          raise SystemCallError.new('SLPEscape', FFI.errno)
-        end
+        result = SLPUnescape(string, pptr, istag)
+        raise Error, "SLPUnescape(): #{result}" if result != :SLP_OK
 
         str = pptr.read_pointer.read_string
       ensure
