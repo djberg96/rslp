@@ -33,13 +33,15 @@ RSpec.describe OpenSLP::SLP do
     end
   end
 
-  context "singleton methods" do
-    example "defines a refresh_interval method" do
-      expect(described_class).to respond_to(:refresh_interval)
-    end
+  describe "singleton methods" do
+    context "refresh_interval" do
+      example "defines a refresh_interval method" do
+        expect(described_class).to respond_to(:refresh_interval)
+      end
 
-    example "returns the expected value for refresh_interval" do
-      expect(described_class.refresh_interval).to eq(0)
+      example "returns the expected value for refresh_interval" do
+        expect(described_class.refresh_interval).to eq(0)
+      end
     end
 
     example "defines a get_property method" do
@@ -50,7 +52,7 @@ RSpec.describe OpenSLP::SLP do
       expect(described_class).to respond_to(:set_property)
     end
 
-    describe "parse_service_url" do
+    context "parse_service_url" do
       let(:valid_url) { "service:test.openslp://192.168.100.1:3003,en,65535" }
 
       before do
@@ -86,17 +88,26 @@ RSpec.describe OpenSLP::SLP do
       end
     end
 
-    example "defines a escape_reserved method" do
-      expect(described_class).to respond_to(:escape_reserved)
+    context "escape_reserved" do
+      example "defines a escape_reserved method" do
+        expect(described_class).to respond_to(:escape_reserved)
+      end
+
+      example "returns the expected value for the escape_reserved method" do
+        expected = "\\2Ctag-example\\2C"
+        expect(described_class.escape_reserved(",tag-example,")).to eq(expected)
+      end
     end
 
-    example "returns the expected value for the escape_reserved method" do
-      expected = "\\2Ctag-example\\2C"
-      expect(described_class.escape_reserved(",tag-example,")).to eq(expected)
-    end
+    context "unescape_reserved" do
+      example "defines a unescape_reserved method" do
+        expect(described_class).to respond_to(:unescape_reserved)
+      end
 
-    example "defines a unescape_reserved method" do
-      expect(described_class).to respond_to(:unescape_reserved)
+      example "returns the expected value for the unescape_reserved method" do
+        expected = ",tag-example,"
+        expect(described_class.unescape_reserved("\\2Ctag-example\\2C")).to eq(expected)
+      end
     end
   end
 
