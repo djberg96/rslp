@@ -288,7 +288,7 @@ module OpenSLP
         ptr = pptr.read_pointer
         struct = SLPSrvURL.new(ptr)
       ensure
-        SLPFree(ptr)
+        pptr.free unless pptr.null?
       end
 
       struct
