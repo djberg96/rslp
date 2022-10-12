@@ -6,7 +6,7 @@
 require 'rspec'
 require 'rslp'
 
-describe OpenSLP::SLP do
+RSpec.describe OpenSLP::SLP do
   before do
     @lang = 'en-us'
     @slp = OpenSLP::SLP.new(@lang, false)
