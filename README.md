@@ -11,10 +11,11 @@ A Ruby wrapper for OpenSLP using FFI.
 ```ruby
 require 'rslp'
 
+# See docs for more methods
 OpenSLP::SLP.new do |slp|
-  # See docs for more methods
-  p slp.find_services
+  p slp.find_services('myservice:myorg')
   p slp.find_scopes
+  p slp.find_service_types
 end
 ```
 
@@ -28,18 +29,19 @@ None at this time.
 
 ## Maintenance
 Please contact me about taking over maintenance of this library if you are
-interested. I'm not actually using it myself, and have no real plans to update
-it.
+interested. I'm not actually using it myself, so maintenance and releases
+will be sporadic at best.
 
 Why then? I originally wrote most of this when I thought we might need it
 for a project at work. That never materialized, but I hated to let it go to
-waste, so I've published what I completed.
+waste, so I've published what I completed and may occasionally tinker with
+it from time to time.
 
 ## License
 Apache-2.0
 
 ## Copyright
-(C) 2003-2021 Daniel J. Berger, All Rights Reserved
+(C) 2003-2022 Daniel J. Berger, All Rights Reserved
 
 ## Warranty
 This package is provided "as is" and without any express or
