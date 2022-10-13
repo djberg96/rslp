@@ -98,20 +98,24 @@ module OpenSLP
         attributes = ""
       end
 
-      cookie = FFI::MemoryPointer.new(:void)
+      begin
+        cookie = FFI::MemoryPointer.new(:void)
 
-      result = SLPReg(
-        @handle,
-        options[:url],
-        options[:lifetime],
-        nil,
-        attributes,
-        options[:fresh],
-        options[:callback],
-        cookie
-      )
+        result = SLPReg(
+          @handle,
+          options[:url],
+          options[:lifetime],
+          nil,
+          attributes,
+          options[:fresh],
+          options[:callback],
+          cookie
+        )
 
-      raise Error, "SLPReg(): #{result}" if result != :SLP_OK
+        raise Error, "SLPReg(): #{result}" if result != :SLP_OK
+      ensure
+        cookie.free unless cookie.null?
+      end
 
       options[:url]
     end
@@ -121,10 +125,14 @@ module OpenSLP
     #
     def deregister(url)
       callback = Proc.new{ |hslp, err, cookie| }
-      cookie = FFI::MemoryPointer.new(:void)
 
-      result = SLPDereg(@handle, url, callback, cookie)
-      raise Error, "SLPDereg(): #{result}" if result != :SLP_OK
+      begin
+        cookie = FFI::MemoryPointer.new(:void)
+        result = SLPDereg(@handle, url, callback, cookie)
+        raise Error, "SLPDereg(): #{result}" if result != :SLP_OK
+      ensure
+        cookie.free unless cookie.null?
+      end
 
       true
     end
@@ -137,10 +145,14 @@ module OpenSLP
     #
     def delete_service_attributes(url, attributes)
       callback = Proc.new{ |hslp, err, cookie| }
-      cookie = FFI::MemoryPointer.new(:void)
 
-      result = SLPDelAttrs(@handle, url, attributes, callback, cookie)
-      raise Error, "SLPDelAttrs(): #{result}" if result != :SLP_OK
+      begin
+        cookie = FFI::MemoryPointer.new(:void)
+        result = SLPDelAttrs(@handle, url, attributes, callback, cookie)
+        raise Error, "SLPDelAttrs(): #{result}" if result != :SLP_OK
+      ensure
+        cookie.free unless cookie.null?
+      end
 
       attributes
     end
@@ -158,7 +170,7 @@ module OpenSLP
         arr = pptr.read_array_of_string
       ensure
         SLPFree(pptr.read_pointer)
-        pptr.free
+        pptr.free unless pptr.null?
       end
 
       arr
@@ -188,10 +200,13 @@ module OpenSLP
         end
       }
 
-      cookie = FFI::MemoryPointer.new(:void)
-
-      result = SLPFindSrvs(@handle, type, scope, filter, callback, cookie)
-      raise Error, "SLPFindSrvs(): #{result}" if result != :SLP_OK
+      begin
+        cookie = FFI::MemoryPointer.new(:void)
+        result = SLPFindSrvs(@handle, type, scope, filter, callback, cookie)
+        raise Error, "SLPFindSrvs(): #{result}" if result != :SLP_OK
+      ensure
+        cookie.free unless cookie.null?
+      end
 
       arr
     end
@@ -219,10 +234,13 @@ module OpenSLP
         end
       }
 
-      cookie = FFI::MemoryPointer.new(:void)
-
-      result = SLPFindSrvTypes(@handle, auth, scope, callback, cookie)
-      raise Error, "SLPFindSrvs(): #{result}" if result != :SLP_OK
+      begin
+        cookie = FFI::MemoryPointer.new(:void)
+        result = SLPFindSrvTypes(@handle, auth, scope, callback, cookie)
+        raise Error, "SLPFindSrvs(): #{result}" if result != :SLP_OK
+      ensure
+        cookie.free unless cookie.null?
+      end
 
       arr
     end
@@ -244,10 +262,13 @@ module OpenSLP
         end
       }
 
-      cookie = FFI::MemoryPointer.new(:void)
-
-      result = SLPFindAttrs(@handle, url, scope, attrs, callback, cookie)
-      raise Error, "SLPFindAttrs(): #{result}" if result != :SLP_OK
+      begin
+        cookie = FFI::MemoryPointer.new(:void)
+        result = SLPFindAttrs(@handle, url, scope, attrs, callback, cookie)
+        raise Error, "SLPFindAttrs(): #{result}" if result != :SLP_OK
+      ensure
+        cookie.free unless cookie.null?
+      end
 
       arr
     end
