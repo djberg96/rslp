@@ -1,4 +1,4 @@
-## 0.0.2 - ???
+## 0.0.2 - 12-Oct-2022
 * Fixed the parse_service_url singleton method. The underlying SLPSrvURL
   struct is now a managed struct.
 * Added some nicer method aliases to the SLPSrvURL struct.
