@@ -237,7 +237,7 @@ module OpenSLP
       begin
         cookie = FFI::MemoryPointer.new(:void)
         result = SLPFindSrvTypes(@handle, auth, scope, callback, cookie)
-        raise Error, "SLPFindSrvs(): #{result}" if result != :SLP_OK
+        raise Error, "SLPFindSrvTypes(): #{result}" if result != :SLP_OK
       ensure
         cookie.free unless cookie.null?
       end
