@@ -34,8 +34,9 @@ module OpenSLP
     # default this value is false.
     #
     # The +host+ argument, if present, will associate the Host/IP with the OpenSLP
-    # handle. This is the Host/IP of the Service Agent / Directory Agent from
-    # which service is requested.
+    # handle. This is the Hostname/IP address of the Service Agent / Directory Agent
+    # from # which service is requested. For multicast, use a comma separated list of
+    # Hostnames/IP addresses.
     #
     # If a block is given, then the object itself is yielded to the block, and
     # it is automatically closed at the end of the block.
@@ -64,9 +65,14 @@ module OpenSLP
 
       @handle = ptr.read_ulong
 
-      if host
-        result = SLPAssociateIP(@handle, @host)
-        raise Error, "SLPAssociateIP(): #{result}" if result != :SLP_OK
+      if @host
+        if @host.split(',').size > 1
+          result = SLPAssociateIFList(@handle, @host)
+          raise Error, "SLPAssociateIFList(): #{result}" if result != :SLP_OK
+        else
+          result = SLPAssociateIP(@handle, @host)
+          raise Error, "SLPAssociateIP(): #{result}" if result != :SLP_OK
+        end
       end
 
       if block_given?
