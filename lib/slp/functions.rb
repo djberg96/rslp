@@ -76,6 +76,7 @@ module OpenSLP
     attach_function :SLPReg,
       [:handle, :string, :ushort, :string, :string, :bool, :SLPRegReportCallback, :pointer], SLPError
 
+    attach_function :SLPSetAppPropertyFile, [:string], SLPError
     attach_function :SLPSetProperty, [:string, :string], :void
     attach_function :SLPUnescape, [:string, :pointer, :bool], SLPError
   end

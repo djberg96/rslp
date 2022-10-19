@@ -371,5 +371,17 @@ module OpenSLP
 
       str
     end
+
+    # Set the application-specific configuration file full path name.
+    #
+    # The contents of this property file will override the contents of the
+    # default or global UA configuration file (usually /etc/slp.conf or
+    # C:\windows\slp.conf).
+    #
+    def self.set_app_property_file(path)
+      result = SLPSetAppPropertyFile(string)
+      raise Error, "SLPSetAppPropertyFile(): #{result}" if result != :SLP_OK
+      path
+    end
   end
 end
