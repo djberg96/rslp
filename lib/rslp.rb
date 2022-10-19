@@ -33,22 +33,29 @@ module OpenSLP
     # the underlying handle is set to handle asynchronous operations or not. By
     # default this value is false.
     #
+    # The +host+ argument, if present, will associate the Host/IP with the OpenSLP
+    # handle. This is the Host/IP of the Service Agent / Directory Agent from
+    # which service is requested.
+    #
     # If a block is given, then the object itself is yielded to the block, and
     # it is automatically closed at the end of the block.
     #
     # Examples:
     #
-    #   OpenSLP::SLP.new('en-us') do |slp|
+    #   # Block form
+    #   OpenSLP::SLP.new(lang: 'en-us', async: false, host: 'localhost') do |slp|
     #     # ... do stuff
     #   end
     #
-    #   slp = OpenSLP::SLP.new('en-us')
+    #   # Non-block form
+    #   slp = OpenSLP::SLP.new(lang: 'en-us')
     #   # Do stuff
     #   slp.close
     #
-    def initialize(lang = '', async = false)
+    def initialize(lang: '', async: false, host: nil)
       @lang = lang
       @async = async
+      @host = host
 
       ptr = FFI::MemoryPointer.new(:ulong)
 
@@ -56,6 +63,11 @@ module OpenSLP
       raise Error, "SLPOpen(): #{result}" if result != :SLP_OK
 
       @handle = ptr.read_ulong
+
+      if host
+        result = SLPAssociateIP(@handle, @host)
+        raise Error, "SLPAssociateIP(): #{result}" if result != :SLP_OK
+      end
 
       if block_given?
         begin
@@ -188,12 +200,15 @@ module OpenSLP
     # form of an LDAP search filter. The default is an empty string, which
     # will gather all services of the requested type.
     #
+    # The result is an array of hashes, with the URL as the key and its lifetime
+    # as the value.
+    #
     def find_services(type, scope = '', filter = '')
       arr = []
 
-      callback = Proc.new{ |hslp, url, life, err, cook|
+      callback = Proc.new{ |_hslp, url, lifetime, err, _cookie|
         if err == SLP_OK
-          arr << {url => life}
+          arr << {url => lifetime}
           true
         else
           false
