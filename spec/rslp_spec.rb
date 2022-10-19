@@ -9,7 +9,7 @@ require 'rslp'
 RSpec.describe OpenSLP::SLP do
   before do
     @lang = 'en-us'
-    @slp = described_class.new(@lang, false)
+    @slp = described_class.new(lang: @lang, async: false, host: 'localhost')
   end
 
   context "version" do
