@@ -108,7 +108,7 @@ module OpenSLP
       options[:attributes] ||= ""
       options[:fresh] ||= true
 
-      options[:callback] ||= Proc.new{ |hslp, err, cookie| }
+      options[:callback] ||= Proc.new{ |_hslp, err, _cookie| }
 
       if options[:attributes] && options[:attributes] != ""
         attributes = options[:attributes].map{ |k,v| "(#{k}=#{v})" }.join(',')
@@ -142,7 +142,7 @@ module OpenSLP
     # is registered and all language locales.
     #
     def deregister(url)
-      callback = Proc.new{ |hslp, err, cookie| }
+      callback = Proc.new{ |_hslp, err, _cookie| }
 
       begin
         cookie = FFI::MemoryPointer.new(:void)
@@ -152,7 +152,7 @@ module OpenSLP
         cookie.free unless cookie.null?
       end
 
-      true
+      url
     end
 
     # Deletes specified attributes from a registered service. The attributes
@@ -246,7 +246,7 @@ module OpenSLP
     def find_service_types(auth = '*', scope = '')
       arr = []
 
-      callback = Proc.new{ |hslp, types, err, cookie|
+      callback = Proc.new{ |_hslp, types, err, _cookie|
         if err == SLP_OK
           arr << types
           true
@@ -274,7 +274,7 @@ module OpenSLP
     def find_service_attributes(url, attrs = '', scope = '')
       arr = []
 
-      callback = Proc.new{ |hslp, attrlist, err, cookie|
+      callback = Proc.new{ |_hslp, attrlist, err, _cookie|
         if err == SLP_OK
           arr << attrlist
           true
