@@ -49,10 +49,12 @@ module OpenSLP
     callback :SLPAttrCallback, [:handle, :string, :int, :pointer], :bool
     callback :SLPRegReportCallback, [:handle, :int, :pointer], :void
 
+    attach_function :SLPAssociateIFList, [:handle, :string], SLPError
+    attach_function :SLPAssociateIP, [:handle, :string], SLPError
     attach_function :SLPClose, [:handle], :void
-    attach_function :SLPEscape, [:string, :pointer, :bool], SLPError
     attach_function :SLPDelAttrs, [:handle, :string, :string, :SLPRegReportCallback, :pointer], SLPError
     attach_function :SLPDereg, [:handle, :string, :SLPRegReportCallback, :pointer], SLPError
+    attach_function :SLPEscape, [:string, :pointer, :bool], SLPError
 
     attach_function :SLPFindAttrs,
       [:handle, :string, :string, :string, :SLPAttrCallback, :pointer], SLPError
@@ -74,6 +76,7 @@ module OpenSLP
     attach_function :SLPReg,
       [:handle, :string, :ushort, :string, :string, :bool, :SLPRegReportCallback, :pointer], SLPError
 
+    attach_function :SLPSetAppPropertyFile, [:string], SLPError
     attach_function :SLPSetProperty, [:string, :string], :void
     attach_function :SLPUnescape, [:string, :pointer, :bool], SLPError
   end

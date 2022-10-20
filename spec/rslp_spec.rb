@@ -9,12 +9,12 @@ require 'rslp'
 RSpec.describe OpenSLP::SLP do
   before do
     @lang = 'en-us'
-    @slp = described_class.new(@lang, false)
+    @slp = described_class.new(lang: @lang, async: false, host: 'localhost')
   end
 
   context "version" do
     example "version is set to the expected value" do
-      expect(described_class::VERSION).to eq('0.0.2')
+      expect(described_class::VERSION).to eq('0.1.0')
     end
   end
 

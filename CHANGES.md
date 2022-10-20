@@ -1,3 +1,10 @@
+## 0.1.0 - 19-Oct-2022
+* Updated the constructor, now uses keyword arguments.
+* Constructor now accepts a hostname, or a comma separate lists of hosts.
+* Added the set_app_property_file singleton method.
+* Changed the deregister method to return the url.
+* Minor refactoring of callback procs.
+
 ## 0.0.2 - 12-Oct-2022
 * Fixed the parse_service_url singleton method. The underlying SLPSrvURL
   struct is now a managed struct.

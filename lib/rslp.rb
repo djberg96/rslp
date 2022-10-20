@@ -11,7 +11,7 @@ module OpenSLP
     extend OpenSLP::Functions
 
     # The version of the rslp library.
-    VERSION = '0.0.2'.freeze
+    VERSION = '0.1.0'.freeze
 
     # Internal error raised whenever an openslp function fails.
     class Error < StandardError; end
@@ -33,22 +33,30 @@ module OpenSLP
     # the underlying handle is set to handle asynchronous operations or not. By
     # default this value is false.
     #
+    # The +host+ argument, if present, will associate the Host/IP with the OpenSLP
+    # handle. This is the Hostname/IP address of the Service Agent / Directory Agent
+    # from # which service is requested. For multicast, use a comma separated list of
+    # Hostnames/IP addresses.
+    #
     # If a block is given, then the object itself is yielded to the block, and
     # it is automatically closed at the end of the block.
     #
     # Examples:
     #
-    #   OpenSLP::SLP.new('en-us') do |slp|
+    #   # Block form
+    #   OpenSLP::SLP.new(lang: 'en-us', async: false, host: 'localhost') do |slp|
     #     # ... do stuff
     #   end
     #
-    #   slp = OpenSLP::SLP.new('en-us')
+    #   # Non-block form
+    #   slp = OpenSLP::SLP.new(lang: 'en-us')
     #   # Do stuff
     #   slp.close
     #
-    def initialize(lang = '', async = false)
+    def initialize(lang: '', async: false, host: nil)
       @lang = lang
       @async = async
+      @host = host
 
       ptr = FFI::MemoryPointer.new(:ulong)
 
@@ -56,6 +64,16 @@ module OpenSLP
       raise Error, "SLPOpen(): #{result}" if result != :SLP_OK
 
       @handle = ptr.read_ulong
+
+      if @host
+        if @host.split(',').size > 1
+          result = SLPAssociateIFList(@handle, @host)
+          raise Error, "SLPAssociateIFList(): #{result}" if result != :SLP_OK
+        else
+          result = SLPAssociateIP(@handle, @host)
+          raise Error, "SLPAssociateIP(): #{result}" if result != :SLP_OK
+        end
+      end
 
       if block_given?
         begin
@@ -90,7 +108,7 @@ module OpenSLP
       options[:attributes] ||= ""
       options[:fresh] ||= true
 
-      options[:callback] ||= Proc.new{ |hslp, err, cookie| }
+      options[:callback] ||= Proc.new{ |_hslp, err, _cookie| }
 
       if options[:attributes] && options[:attributes] != ""
         attributes = options[:attributes].map{ |k,v| "(#{k}=#{v})" }.join(',')
@@ -124,7 +142,7 @@ module OpenSLP
     # is registered and all language locales.
     #
     def deregister(url)
-      callback = Proc.new{ |hslp, err, cookie| }
+      callback = Proc.new{ |_hslp, err, _cookie| }
 
       begin
         cookie = FFI::MemoryPointer.new(:void)
@@ -134,7 +152,7 @@ module OpenSLP
         cookie.free unless cookie.null?
       end
 
-      true
+      url
     end
 
     # Deletes specified attributes from a registered service. The attributes
@@ -188,12 +206,15 @@ module OpenSLP
     # form of an LDAP search filter. The default is an empty string, which
     # will gather all services of the requested type.
     #
+    # The result is an array of hashes, with the URL as the key and its lifetime
+    # as the value.
+    #
     def find_services(type, scope = '', filter = '')
       arr = []
 
-      callback = Proc.new{ |hslp, url, life, err, cook|
+      callback = Proc.new{ |_hslp, url, lifetime, err, _cookie|
         if err == SLP_OK
-          arr << {url => life}
+          arr << {url => lifetime}
           true
         else
           false
@@ -225,7 +246,7 @@ module OpenSLP
     def find_service_types(auth = '*', scope = '')
       arr = []
 
-      callback = Proc.new{ |hslp, types, err, cookie|
+      callback = Proc.new{ |_hslp, types, err, _cookie|
         if err == SLP_OK
           arr << types
           true
@@ -253,7 +274,7 @@ module OpenSLP
     def find_service_attributes(url, attrs = '', scope = '')
       arr = []
 
-      callback = Proc.new{ |hslp, attrlist, err, cookie|
+      callback = Proc.new{ |_hslp, attrlist, err, _cookie|
         if err == SLP_OK
           arr << attrlist
           true
@@ -349,6 +370,18 @@ module OpenSLP
       end
 
       str
+    end
+
+    # Set the application-specific configuration file full path name.
+    #
+    # The contents of this property file will override the contents of the
+    # default or global UA configuration file (usually /etc/slp.conf or
+    # C:\windows\slp.conf).
+    #
+    def self.set_app_property_file(path)
+      result = SLPSetAppPropertyFile(string)
+      raise Error, "SLPSetAppPropertyFile(): #{result}" if result != :SLP_OK
+      path
     end
   end
 end
