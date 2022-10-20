@@ -3,7 +3,7 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'rslp'
-  spec.version    = '0.0.2'
+  spec.version    = '0.1.0'
   spec.license    = 'Apache-2.0'
   spec.author     = 'Daniel J. Berger'
   spec.email      = 'djberg96@gmail.com'
