@@ -31,7 +31,7 @@ module OpenSLP
     #
     # The +async+ argument may be set to true or false and establishes whether
     # the underlying handle is set to handle asynchronous operations or not. By
-    # default this value is false.
+    # default this value is false, and may not be supported by your implementation.
     #
     # The +host+ argument, if present, will associate the Host/IP with the OpenSLP
     # handle. This is the Hostname/IP address of the Service Agent / Directory Agent
