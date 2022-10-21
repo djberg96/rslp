@@ -208,8 +208,8 @@ module OpenSLP
     # form of an LDAP search filter. The default is an empty string, which
     # will gather all services of the requested type.
     #
-    # The result is an array of hashes, with the URL as the key and its lifetime
-    # as the value.
+    # The result is an array of hashes, with the URL as the key and its
+    # remaining lifetime as the value.
     #
     def find_services(type, scope = '', filter = '')
       arr = []
