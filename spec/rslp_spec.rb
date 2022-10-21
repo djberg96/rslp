@@ -144,8 +144,6 @@ RSpec.describe OpenSLP::SLP do
 
       example "accepts hash attributes option and registers them as expected" do
         expect(@slp.register(url: url, attributes: attributes)).to eq(url)
-        expect(@slp.find_service_attributes(url, "foo")).to eq(["(foo=hello)"])
-        expect(@slp.find_service_attributes(url, "foo,bar")).to eq(["(foo=hello),(bar=world)"])
       end
 
       example "raises an error if the :url option is not provided" do
@@ -160,6 +158,22 @@ RSpec.describe OpenSLP::SLP do
 
       example "fails to deregister a service successfully if it does not exist" do
         expect{ @slp.deregister('bogus') }.to raise_error(OpenSLP::SLP::Error)
+      end
+    end
+
+    context "find service attributes" do
+      before do
+        @slp.register(url: url, attributes: attributes)
+      end
+
+      example "successfully finds service attribute when they exist" do
+        expect(@slp.find_service_attributes(url)).to eq(["(foo=hello),(bar=world)"])
+        expect(@slp.find_service_attributes(url, "foo")).to eq(["(foo=hello)"])
+        expect(@slp.find_service_attributes(url, "foo,bar")).to eq(["(foo=hello),(bar=world)"])
+      end
+
+      example "returns an empty array if the service attribute does not exist" do
+        expect(@slp.find_service_attributes(url, "bogus")).to eq([])
       end
     end
   end
