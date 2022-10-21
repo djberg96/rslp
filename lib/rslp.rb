@@ -104,6 +104,8 @@ module OpenSLP
     # Returns the url if successful.
     #
     def register(options = {})
+      url = options.fetch(:url){ raise ArgumentError, ":url must be provided" }
+
       options[:lifetime] ||= SLP_LIFETIME_DEFAULT
       options[:attributes] ||= ""
       options[:fresh] ||= true
@@ -121,7 +123,7 @@ module OpenSLP
 
         result = SLPReg(
           @handle,
-          options[:url],
+          url,
           options[:lifetime],
           nil,
           attributes,
@@ -135,7 +137,7 @@ module OpenSLP
         cookie.free unless cookie.null?
       end
 
-      options[:url]
+      url
     end
 
     # Deregisters the advertisement for +url+ in all scopes where the service
