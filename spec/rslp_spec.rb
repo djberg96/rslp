@@ -111,6 +111,48 @@ RSpec.describe OpenSLP::SLP do
     end
   end
 
+  describe "registration and deregistration" do
+    let(:url){ "service:ntp://time.windows.com" }
+    let(:attributes){ {"foo" => "hello", "bar" => "world"} }
+
+    before do
+      @slp = OpenSLP::SLP.new(host: 'localhost')
+    end
+
+    context "registration" do
+      example "registers a service successfully if url is provided" do
+        expect(@slp.register(url: url)).to eq(url)
+      end
+
+      example "doesn't matter if service is already registered" do
+        expect(@slp.register(url: url)).to eq(url)
+      end
+
+      example "accepts hash attributes option" do
+        expect(@slp.register(url: url, attributes: attributes)).to eq(url)
+        #expect(@slp.find_service_attributes(url, "foo=hello")).to eq(attributes)
+      end
+
+      example "raises an error if the :url option is not provided" do
+        expect{ @slp.register }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "deregistration" do
+      example "deregisters a service successfully if it exists" do
+        expect(@slp.deregister(url)).to eq(url)
+      end
+
+      example "fails to deregister a service successfully if it does not exist" do
+        expect{ @slp.deregister('bogus') }.to raise_error(OpenSLP::SLP::Error)
+      end
+    end
+
+    after do
+      @slp.close
+    end
+  end
+
   after do
     @slp.close if @slp
     @slp = nil
