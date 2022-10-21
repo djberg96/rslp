@@ -1,8 +1,14 @@
-########################################################################
+##############################################################################
 # rslp_spec.rb
 #
-# Test suite for the rslp library.
-########################################################################
+# Test suite for the rslp library. Note that these specs assume that you
+# have an OpenSLP server running on localhost. If not, install Docker and
+# run the following command:
+#
+#   docker run -d -p 427:427/tcp -p 427:427/udp vcrhonek/openslp
+#
+# Once complete, simply stop the docker container and delete the image.
+##############################################################################
 require 'rspec'
 require 'rslp'
 
