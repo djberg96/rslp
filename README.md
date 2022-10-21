@@ -32,6 +32,9 @@ The easiest way to do that is to install docker and run:
 
 Once you're done just terminate the container.
 
+## Notes
+Also see Novell's SLP implementation.
+
 ## Future Plans
 None at this time.
 
