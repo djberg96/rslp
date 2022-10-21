@@ -115,10 +115,17 @@ RSpec.describe OpenSLP::SLP do
         expect(described_class.unescape_reserved("\\2Ctag-example\\2C")).to eq(expected)
       end
     end
+
+    context "set_app_property_file" do
+      example "defines a set_app_property_file method" do
+        expect(described_class).to respond_to(:set_app_property_file)
+      end
+    end
   end
 
   describe "instance methods" do
-    let(:url){ "service:ntp://time.windows.com" }
+    let(:service){ "service:ntp" }
+    let(:url){ "#{service}://time.windows.com" }
     let(:attributes){ {"foo" => "hello", "bar" => "world"} }
 
     context "close" do
@@ -130,6 +137,40 @@ RSpec.describe OpenSLP::SLP do
       example "calling close multiple times has no effect" do
         expect(@slp.close).to be_nil
         expect(@slp.close).to be_nil
+      end
+    end
+
+    context "find_scopes" do
+      example "has a find_scopes method" do
+        expect(@slp).to respond_to(:find_scopes)
+      end
+
+      example "the find_scopes method returns the expected value" do
+        expect(@slp.find_scopes).to eq(['DEFAULT'])
+      end
+    end
+
+    context "find_services" do
+      example "has a find_services method" do
+        expect(@slp).to respond_to(:find_services)
+      end
+
+      example "the find_services method returns the expected types" do
+        results = @slp.find_services(service)
+        expect(results).to be_kind_of(Array)
+        expect(results.first).to be_kind_of(Hash)
+      end
+
+      example "the find_services method returns the expected values" do
+        results = @slp.find_services(service)
+        expect(results.first.keys).to include(url)
+        expect(results.first.values.first).to be_kind_of(Numeric)
+      end
+
+      example "the find_services method with scope returns the expected values" do
+        results = @slp.find_services(service)
+        expect(results.first.keys).to include(url)
+        expect(results.first.values.first).to be_kind_of(Numeric)
       end
     end
 
@@ -148,6 +189,11 @@ RSpec.describe OpenSLP::SLP do
 
       example "raises an error if the :url option is not provided" do
         expect{ @slp.register }.to raise_error(ArgumentError, ":url must be provided")
+      end
+
+      example "registers a service successfully with a lifetime value" do
+        expect(@slp.register(url: url, lifetime: OpenSLP::SLP::SLP_LIFETIME_MAXIMUM)).to eq(url)
+        expect(@slp.find_services(service).first.values.first).to be_within(1).of(OpenSLP::SLP::SLP_LIFETIME_MAXIMUM)
       end
     end
 
