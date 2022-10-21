@@ -128,9 +128,10 @@ RSpec.describe OpenSLP::SLP do
         expect(@slp.register(url: url)).to eq(url)
       end
 
-      example "accepts hash attributes option" do
+      example "accepts hash attributes option and registers them as expected" do
         expect(@slp.register(url: url, attributes: attributes)).to eq(url)
-        #expect(@slp.find_service_attributes(url, "foo=hello")).to eq(attributes)
+        expect(@slp.find_service_attributes(url, "foo")).to eq(["(foo=hello)"])
+        expect(@slp.find_service_attributes(url, "foo,bar")).to eq(["(foo=hello),(bar=world)"])
       end
 
       example "raises an error if the :url option is not provided" do
