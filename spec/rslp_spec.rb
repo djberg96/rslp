@@ -121,10 +121,6 @@ RSpec.describe OpenSLP::SLP do
     let(:url){ "service:ntp://time.windows.com" }
     let(:attributes){ {"foo" => "hello", "bar" => "world"} }
 
-    before do
-      @slp = OpenSLP::SLP.new(host: 'localhost')
-    end
-
     context "registration" do
       example "registers a service successfully if url is provided" do
         expect(@slp.register(url: url)).to eq(url)
@@ -141,7 +137,7 @@ RSpec.describe OpenSLP::SLP do
       end
 
       example "raises an error if the :url option is not provided" do
-        expect{ @slp.register }.to raise_error(ArgumentError)
+        expect{ @slp.register }.to raise_error(ArgumentError, ":url must be provided")
       end
     end
 
@@ -153,10 +149,6 @@ RSpec.describe OpenSLP::SLP do
       example "fails to deregister a service successfully if it does not exist" do
         expect{ @slp.deregister('bogus') }.to raise_error(OpenSLP::SLP::Error)
       end
-    end
-
-    after do
-      @slp.close
     end
   end
 
