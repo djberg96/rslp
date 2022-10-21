@@ -117,9 +117,21 @@ RSpec.describe OpenSLP::SLP do
     end
   end
 
-  describe "registration and deregistration" do
+  describe "instance methods" do
     let(:url){ "service:ntp://time.windows.com" }
     let(:attributes){ {"foo" => "hello", "bar" => "world"} }
+
+    context "close" do
+      example "has a close method that returns the expected value" do
+        expect(@slp).to respond_to(:close)
+        expect(@slp.close).to be_nil
+      end
+
+      example "calling close multiple times has no effect" do
+        expect(@slp.close).to be_nil
+        expect(@slp.close).to be_nil
+      end
+    end
 
     context "registration" do
       example "registers a service successfully if url is provided" do
