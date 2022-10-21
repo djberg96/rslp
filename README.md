@@ -24,6 +24,14 @@ None that I'm aware of. Please report bugs on the project page at:
 
 https://github.com/djberg96/rslp
 
+## Running the Specs
+You will need an OpenSLP server running on localhost to run all of the specs.
+The easiest way to do that is to install docker and run:
+
+  `docker run -d -p 427:427/tcp -p 427:427/udp vcrhonek/openslp`
+
+Once you're done just terminate the container.
+
 ## Future Plans
 None at this time.
 
