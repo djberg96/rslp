@@ -151,6 +151,11 @@ RSpec.describe OpenSLP::SLP do
     end
 
     context "find_services" do
+      before do
+        sleep 1
+        @slp.register(url: url, attributes: attributes)
+      end
+
       example "has a find_services method" do
         expect(@slp).to respond_to(:find_services)
       end
@@ -167,11 +172,24 @@ RSpec.describe OpenSLP::SLP do
         expect(results.first.values.first).to be_kind_of(Numeric)
       end
 
-      example "the find_services method with scope returns the expected values" do
-        results = @slp.find_services(service)
+      example "the find_services method with valid scope returns the expected values" do
+        results = @slp.find_services(service, 'DEFAULT')
         expect(results.first.keys).to include(url)
         expect(results.first.values.first).to be_kind_of(Numeric)
       end
+
+=begin
+      # These specs appear to cause a segfault in the OpenSLP daemon.
+      example "the find_services method with invalid scope returns an empty value" do
+        results = @slp.find_services(service, 'bogus')
+        expect(results).to be_empty
+      end
+
+      example "the find_services method with filter on existing attribute returns the expected values" do
+        results = @slp.find_services(service, '', "(foo=hello)")
+        expect(results).to eq(1)
+      end
+=end
     end
 
     context "registration" do
@@ -200,6 +218,7 @@ RSpec.describe OpenSLP::SLP do
     context "deregistration" do
       example "deregisters a service successfully if it exists" do
         expect(@slp.deregister(url)).to eq(url)
+        expect(@slp.find_services(url)).to be_empty
       end
 
       example "fails to deregister a service successfully if it does not exist" do
