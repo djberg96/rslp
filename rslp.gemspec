@@ -3,7 +3,7 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'rslp'
-  spec.version    = '0.1.0'
+  spec.version    = '0.1.1'
   spec.license    = 'Apache-2.0'
   spec.author     = 'Daniel J. Berger'
   spec.email      = 'djberg96@gmail.com'
@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   }
 
   spec.description = <<-EOF
-    The rslp library is an FFI interface for the OpenSLP service
-    location protocol library.
+    The rslp library is an FFI interface for the OpenSLP service location
+    protocol library. See http://www.openslp.org for more information.
   EOF
 end

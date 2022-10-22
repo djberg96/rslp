@@ -11,7 +11,7 @@ module OpenSLP
     extend OpenSLP::Functions
 
     # The version of the rslp library.
-    VERSION = '0.1.0'.freeze
+    VERSION = '0.1.1'.freeze
 
     # Internal error raised whenever an openslp function fails.
     class Error < StandardError; end

@@ -1,3 +1,11 @@
+## 0.1.1 - 22-Oct-2022
+* Added many more specs, along with instructions for how to install and
+  run an openslp container via Docker so that you can run the specs.
+* The :url parameter to the register method now raises an error unless
+  it is present. It was always required in practice, but now it's enforced.
+* Many documentation updates, notably that some methods may not actually
+  be implemented yet by the underlying OpenSLP library.
+
 ## 0.1.0 - 19-Oct-2022
 * Updated the constructor, now uses keyword arguments.
 * Constructor now accepts a hostname, or a comma separate lists of hosts.
