@@ -192,6 +192,18 @@ RSpec.describe OpenSLP::SLP do
 =end
     end
 
+    context "find_service_types" do
+      example "has a find_services method" do
+        expect(@slp).to respond_to(:find_service_types)
+      end
+
+      example "the find_service_types method returns the expected results" do
+        results = @slp.find_service_types
+        expect(results).to be_kind_of(Array)
+        expect(results.first).to eq(service)
+      end
+    end
+
     context "registration" do
       example "registers a service successfully if url is provided" do
         expect(@slp.register(url: url)).to eq(url)
