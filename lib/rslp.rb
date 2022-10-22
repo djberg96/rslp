@@ -163,6 +163,10 @@ module OpenSLP
     #
     # Returns the list of deleted attributes if successful.
     #
+    # Note that this method may not be supported. In that case, the only way
+    # to alter a service's attributes is to deregister it then register it
+    # again without the undesired attributes.
+    #
     def delete_service_attributes(url, attributes)
       callback = Proc.new{ |hslp, err, cookie| }
 
