@@ -31,7 +31,7 @@ module OpenSLP
     #
     # The +async+ argument may be set to true or false and establishes whether
     # the underlying handle is set to handle asynchronous operations or not. By
-    # default this value is false.
+    # default this value is false, and may not be supported by your implementation.
     #
     # The +host+ argument, if present, will associate the Host/IP with the OpenSLP
     # handle. This is the Hostname/IP address of the Service Agent / Directory Agent
@@ -104,6 +104,8 @@ module OpenSLP
     # Returns the url if successful.
     #
     def register(options = {})
+      url = options.fetch(:url){ raise ArgumentError, ":url must be provided" }
+
       options[:lifetime] ||= SLP_LIFETIME_DEFAULT
       options[:attributes] ||= ""
       options[:fresh] ||= true
@@ -121,7 +123,7 @@ module OpenSLP
 
         result = SLPReg(
           @handle,
-          options[:url],
+          url,
           options[:lifetime],
           nil,
           attributes,
@@ -135,7 +137,7 @@ module OpenSLP
         cookie.free unless cookie.null?
       end
 
-      options[:url]
+      url
     end
 
     # Deregisters the advertisement for +url+ in all scopes where the service
@@ -160,6 +162,10 @@ module OpenSLP
     # ids.
     #
     # Returns the list of deleted attributes if successful.
+    #
+    # Note that this method may not be supported. In that case, the only way
+    # to alter a service's attributes is to deregister it then register it
+    # again without the undesired attributes.
     #
     def delete_service_attributes(url, attributes)
       callback = Proc.new{ |hslp, err, cookie| }
@@ -206,8 +212,8 @@ module OpenSLP
     # form of an LDAP search filter. The default is an empty string, which
     # will gather all services of the requested type.
     #
-    # The result is an array of hashes, with the URL as the key and its lifetime
-    # as the value.
+    # The result is an array of hashes, with the URL as the key and its
+    # remaining lifetime as the value.
     #
     def find_services(type, scope = '', filter = '')
       arr = []
