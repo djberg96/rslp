@@ -23,8 +23,8 @@ end
 None that I'm aware of in this library.
 
 However, the OpenSLP implementation itself has at least one bug in the
-SLPFindSrvs() function, where specifying a filter could cause it to crash.
-This means that specifying a filter to the OpenSLP::SLP.find_services method
+`SLPFindSrvs()` function, where specifying a filter could cause it to crash.
+This means that specifying a filter to the `OpenSLP::SLP.find_services` method
 could cause a crash. See https://github.com/openslp-org/openslp/issues/11
 for details.
 
