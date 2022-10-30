@@ -4,3 +4,12 @@ AllCops:
     - rslp.gemspec
     - Gemfile
     - Rakefile
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Style/BlockComments:
+  Enabled: false
