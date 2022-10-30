@@ -162,20 +162,20 @@ RSpec.describe OpenSLP::SLP do
 
       example "the find_services method returns the expected types" do
         results = @slp.find_services(service)
-        expect(results).to be_kind_of(Array)
-        expect(results.first).to be_kind_of(Hash)
+        expect(results).to be_a(Array)
+        expect(results.first).to be_a(Hash)
       end
 
       example "the find_services method returns the expected values" do
         results = @slp.find_services(service)
         expect(results.first.keys).to include(url)
-        expect(results.first.values.first).to be_kind_of(Numeric)
+        expect(results.first.values.first).to be_a(Numeric)
       end
 
       example "the find_services method with valid scope returns the expected values" do
         results = @slp.find_services(service, 'DEFAULT')
         expect(results.first.keys).to include(url)
-        expect(results.first.values.first).to be_kind_of(Numeric)
+        expect(results.first.values.first).to be_a(Numeric)
       end
 
 =begin
@@ -199,7 +199,7 @@ RSpec.describe OpenSLP::SLP do
 
       example "the find_service_types method returns the expected results" do
         results = @slp.find_service_types
-        expect(results).to be_kind_of(Array)
+        expect(results).to be_a(Array)
         expect(results.first).to eq(service)
       end
     end
