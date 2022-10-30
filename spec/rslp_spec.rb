@@ -211,6 +211,7 @@ RSpec.describe OpenSLP::SLP do
 
       example "doesn't matter if service is already registered" do
         expect(@slp.register(url: url)).to eq(url)
+        expect{ @slp.register(url: url) }.not_to raise_error
       end
 
       example "accepts hash attributes option and registers them as expected" do
