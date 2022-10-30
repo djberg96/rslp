@@ -12,7 +12,7 @@ module OpenSLP
         ffi_lib :slp
       rescue LoadError
         if File::ALT_SEPARATOR
-          ffi_lib "C:/Program Files (x86)/OpenSLP/slp"
+          ffi_lib 'C:/Program Files (x86)/OpenSLP/slp'
         else
           raise
         end

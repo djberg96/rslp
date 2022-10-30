@@ -104,18 +104,18 @@ module OpenSLP
     # Returns the url if successful.
     #
     def register(options = {})
-      url = options.fetch(:url){ raise ArgumentError, ":url must be provided" }
+      url = options.fetch(:url){ raise ArgumentError, ':url must be provided' }
 
       options[:lifetime] ||= SLP_LIFETIME_DEFAULT
-      options[:attributes] ||= ""
+      options[:attributes] ||= ''
       options[:fresh] ||= true
 
       options[:callback] ||= Proc.new{ |_hslp, err, _cookie| }
 
-      if options[:attributes] && options[:attributes] != ""
+      if options[:attributes] && options[:attributes] != ''
         attributes = options[:attributes].map{ |k,v| "(#{k}=#{v})" }.join(',')
       else
-        attributes = ""
+        attributes = ''
       end
 
       begin
