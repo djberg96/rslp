@@ -1,0 +1,6 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - rslp.gemspec
+    - Gemfile
+    - Rakefile
