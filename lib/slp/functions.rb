@@ -44,40 +44,40 @@ module OpenSLP
 
     typedef :ulong, :handle
 
-    callback :SLPSrvURLCallback, [:handle, :string, :ushort, :int, :pointer], :bool
-    callback :SLPSrvTypeCallback, [:handle, :string, :int, :pointer], :bool
-    callback :SLPAttrCallback, [:handle, :string, :int, :pointer], :bool
-    callback :SLPRegReportCallback, [:handle, :int, :pointer], :void
+    callback :SLPSrvURLCallback, %i[handle string ushort int pointer], :bool
+    callback :SLPSrvTypeCallback, %i[handle string int pointer], :bool
+    callback :SLPAttrCallback, %i[handle string int pointer], :bool
+    callback :SLPRegReportCallback, %i[handle int pointer], :void
 
-    attach_function :SLPAssociateIFList, [:handle, :string], SLPError
-    attach_function :SLPAssociateIP, [:handle, :string], SLPError
+    attach_function :SLPAssociateIFList, %i[handle string], SLPError
+    attach_function :SLPAssociateIP, %i[handle string], SLPError
     attach_function :SLPClose, [:handle], :void
-    attach_function :SLPDelAttrs, [:handle, :string, :string, :SLPRegReportCallback, :pointer], SLPError
-    attach_function :SLPDereg, [:handle, :string, :SLPRegReportCallback, :pointer], SLPError
-    attach_function :SLPEscape, [:string, :pointer, :bool], SLPError
+    attach_function :SLPDelAttrs, %i[handle string string SLPRegReportCallback pointer], SLPError
+    attach_function :SLPDereg, %i[handle string SLPRegReportCallback pointer], SLPError
+    attach_function :SLPEscape, %i[string pointer bool], SLPError
 
     attach_function :SLPFindAttrs,
-      [:handle, :string, :string, :string, :SLPAttrCallback, :pointer], SLPError
+      %i[handle string string string SLPAttrCallback pointer], SLPError
 
-    attach_function :SLPFindScopes, [:handle, :pointer], SLPError
+    attach_function :SLPFindScopes, %i[handle pointer], SLPError
 
     attach_function :SLPFindSrvs,
-      [:handle, :string, :string, :string, :SLPSrvURLCallback, :pointer], SLPError
+      %i[handle string string string SLPSrvURLCallback pointer], SLPError
 
     attach_function :SLPFindSrvTypes,
-      [:handle, :string, :string, :SLPSrvTypeCallback, :pointer], SLPError
+      %i[handle string string SLPSrvTypeCallback pointer], SLPError
 
     attach_function :SLPFree, [:pointer], :void
     attach_function :SLPGetProperty, [:string], :string
     attach_function :SLPGetRefreshInterval, [], :uint
-    attach_function :SLPOpen, [:string, :bool, :pointer], SLPError
-    attach_function :SLPParseSrvURL, [:string, :pointer], SLPError
+    attach_function :SLPOpen, %i[string bool pointer], SLPError
+    attach_function :SLPParseSrvURL, %i[string pointer], SLPError
 
     attach_function :SLPReg,
-      [:handle, :string, :ushort, :string, :string, :bool, :SLPRegReportCallback, :pointer], SLPError
+      %i[handle string ushort string string bool SLPRegReportCallback pointer], SLPError
 
     attach_function :SLPSetAppPropertyFile, [:string], SLPError
-    attach_function :SLPSetProperty, [:string, :string], :void
-    attach_function :SLPUnescape, [:string, :pointer, :bool], SLPError
+    attach_function :SLPSetProperty, %i[string string], :void
+    attach_function :SLPUnescape, %i[string pointer bool], SLPError
   end
 end
