@@ -180,6 +180,8 @@ RSpec.describe OpenSLP::SLP do
 
 =begin
       # These specs appear to cause a segfault in the OpenSLP daemon.
+      # See https://github.com/openslp-org/openslp/issues/11
+      #
       example "the find_services method with invalid scope returns an empty value" do
         results = @slp.find_services(service, 'bogus')
         expect(results).to be_empty
