@@ -5,7 +5,7 @@ require 'rake/clean'
 CLEAN.include('**/*.gem', '**/*.rbc', '**/*.rbx', '**/*.lock')
 
 namespace 'gem' do
-  desc "Create the sys-cpu gem"
+  desc "Create the rslp gem"
   task :create => [:clean] do
     require 'rubygems/package'
     spec = Gem::Specification.load('rslp.gemspec')
@@ -13,7 +13,7 @@ namespace 'gem' do
     Gem::Package.build(spec)
   end
 
-  desc "Install the sys-cpu gem"
+  desc "Install the rslp gem"
   task :install => [:create] do
     file = Dir["*.gem"].first
     sh "gem install -l #{file}"
