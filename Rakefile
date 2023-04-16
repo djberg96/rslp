@@ -20,6 +20,12 @@ namespace 'gem' do
   end
 end
 
+desc "Setup the openslp docker container"
+task :docker do
+  sh "sudo systemctl start docker"
+  sh "sudo docker run -d -p 427:427/tcp -p 427:427/udp vcrhonek/openslp"
+end
+
 desc "Run the test suite"
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
