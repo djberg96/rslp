@@ -22,8 +22,13 @@ end
 
 desc "Setup the openslp docker container"
 task :docker do
-  sh "sudo systemctl start docker"
-  sh "sudo docker run -d -p 427:427/tcp -p 427:427/udp vcrhonek/openslp"
+  if RbConfig::CONFIG['host'] =~ /macos|darwin/i
+    sh "docker desktop start"
+    sh "docker run -d -p 427:427/tcp -p 427:427/udp vcrhonek/openslp"
+  else
+    sh "sudo systemctl start docker"
+    sh "sudo docker run -d -p 427:427/tcp -p 427:427/udp vcrhonek/openslp"
+  end
 end
 
 desc "Run the test suite"
